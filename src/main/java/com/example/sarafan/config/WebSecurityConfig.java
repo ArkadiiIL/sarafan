@@ -20,8 +20,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .mvcMatchers("/").permitAll()
-                .anyRequest().authenticated()
+                        .antMatchers("/", "/error**", "/js/**","/login**").permitAll()
+                        .anyRequest().authenticated()
+                .and()
+                .logout().logoutSuccessUrl("/").permitAll()
                 .and()
                 .csrf().disable();
     }
