@@ -2,6 +2,7 @@
 build/
 !gradle/wrapper/gradle-wrapper.jar
 *.properties
+package.json
 
 ### STS ###
 .apt_generated
