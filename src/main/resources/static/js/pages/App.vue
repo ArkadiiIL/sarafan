@@ -17,7 +17,7 @@
             >
                 {{profile.name}}
             </v-btn>
-            <v-btn flat v-if="profile" icon href="/logout">
+            <v-btn text v-if="profile" icon href="/logout">
                 <v-icon>exit_to_app</v-icon>
             </v-btn>
             <v-btn v-if="!profile" icon href="/login">

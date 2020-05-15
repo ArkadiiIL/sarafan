@@ -24,7 +24,6 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
-	implementation 'org.projectlombok:lombok'
 	implementation 'javax.xml.bind:jaxb-api'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -34,6 +33,14 @@ dependencies {
 	compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE')
 	compile('org.springframework.session:spring-session-jdbc')
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+	compile group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+
+
+	compileOnly 'org.projectlombok:lombok:1.18.12'
+	annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+	testCompileOnly 'org.projectlombok:lombok:1.18.12'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 
 test {
