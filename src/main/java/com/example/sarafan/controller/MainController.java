@@ -3,7 +3,7 @@ package com.example.sarafan.controller;
 import com.example.sarafan.domain.User;
 import com.example.sarafan.domain.Views;
 import com.example.sarafan.dto.MessagePageDto;
-import com.example.sarafan.repo.MessageRepo;
+import com.example.sarafan.repo.UserDetailsRepo;
 import com.example.sarafan.service.MessageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,24 +19,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
 public class MainController {
     private final MessageService messageService;
+    private final UserDetailsRepo userDetailsRepo;
 
     @Value("${spring.profiles.active}")
     private String profile;
-    private final ObjectWriter writer;
+    private final ObjectWriter messageWriter;
+    private final ObjectWriter profileWriter;
 
     @Autowired
-    public MainController(MessageService messageService, ObjectMapper mapper) {
+    public MainController(MessageService messageService, UserDetailsRepo userDetailsRepo, ObjectMapper mapper) {
 
         this.messageService = messageService;
+        this.userDetailsRepo = userDetailsRepo;
 
-        this.writer = mapper
-                .setConfig(mapper.getSerializationConfig())
+        ObjectMapper objectMapper = mapper
+                .setConfig(mapper.getSerializationConfig());
+        this.messageWriter = objectMapper
                 .writerWithView(Views.FullMessage.class);
+        this.profileWriter = objectMapper
+                .writerWithView(Views.FullProfile.class);
     }
 
     @GetMapping
@@ -44,13 +51,15 @@ public class MainController {
                        @AuthenticationPrincipal User user) throws JsonProcessingException {
         HashMap<Object, Object> data = new HashMap<>();
         if(user != null) {
-            data.put("profile", user);
+            User userFromDb = userDetailsRepo.findById(user.getId()).get();
+            String serializedProfile = profileWriter.writeValueAsString(userFromDb);
+            model.addAttribute("profile", serializedProfile);
 
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
             PageRequest pageRequest = PageRequest.of(0, MessageController.MESSAGE_PER_PAGE, sort);
             MessagePageDto messagePageDto = messageService.findAll(pageRequest);
 
-            String messages = writer.writeValueAsString(messagePageDto.getMessages());
+            String messages = messageWriter.writeValueAsString(messagePageDto.getMessages());
 
             model.addAttribute("messages", messages);
             data.put("currentPage", messagePageDto.getCurrentPage());
@@ -59,6 +68,7 @@ public class MainController {
         else
         {
             model.addAttribute("messages", "[]");
+            model.addAttribute("profile","null" );
         }
         model.addAttribute("frontendData", data);
         model.addAttribute("isDevMode","dev".equals(profile));

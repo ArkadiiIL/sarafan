@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 
 const routes = [
     { path:'/', component: MessagesList },
-    { path:'/profile', component: Profile },
+    { path:'/user/:id?', component: Profile },
     { path: '/auth', component: Auth },
     { path:'*', component: MessagesList }
 
