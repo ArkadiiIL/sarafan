@@ -33,6 +33,7 @@ dependencies {
 	compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE')
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+	compile 'io.sentry:sentry-spring:1.7.30'
 
 
 	compileOnly 'org.projectlombok:lombok:1.18.12'
