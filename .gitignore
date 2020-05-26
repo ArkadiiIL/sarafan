@@ -1,8 +1,6 @@
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-*.properties
-package.json
 
 ### STS ###
 .apt_generated
@@ -29,4 +27,6 @@ out/
 
 ### VS Code ###
 .vscode/
+node_modules
+/src/main/resources/static/js/
 
